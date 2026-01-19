@@ -24,3 +24,22 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0f172a;
+    color: #f9fafb;
+  }
+
+  .dark-mode {
+    background-color: #0f172a !important;
+    color: #f9fafb !important;
+  }
+
+  .download-btn {
+    background-color: #1e293b !important;
+    color: #f9fafb !important;
+    border: 1px solid #334155 !important;
+  }
+}

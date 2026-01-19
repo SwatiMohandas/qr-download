@@ -1,52 +1,116 @@
 "use client";
 
-type FileItem = { name: string; url: string };
+type FileKey = "pdf1" | "pdf2" | "mp4";
+
+const FILES: { key: FileKey; label: string }[] = [
+  { key: "pdf1", label: "Download THAI BROCHURE (PDF)" },
+  { key: "pdf2", label: "Download TT Vector Malabar Mango Catalogue (PDF)" },
+  { key: "mp4", label: "Download Team Thai Final (MP4)" },
+];
 
 export default function DownloadPage() {
-  const files: FileItem[] = [
-    {
-      name: "Download THAI BROCHURE (PDF)",
-      url: "https://drive.google.com/uc?export=download&id=1Zo-eqq9EGc53LLjQGQ7q1AnzjFMYZGLk",
-    },
-    {
-      name: "Download TT Vector Catalogue (PDF)",
-      url: "https://drive.google.com/uc?export=download&id=18rU86gXtk1rD7zR1728K-k4-t9Xh9AY9",
-    },
-    {
-      name: "Download Team Thai Final (MP4)",
-      url: "https://drive.google.com/uc?export=download&id=1K8G43LWFJ7LxbaJ9Ggutn0H3mJlXNPbm",
-    },
-  ];
+  const startDownload = (key: FileKey) => {
+    // Triggers server-side download via Next.js API
+    window.location.href = `/api/dl?key=${key}`;
+  };
 
   return (
-    <main style={{ padding: 24, fontFamily: "sans-serif" }}>
-      <h1>Download Files</h1>
-      <p>Tap each button to download.</p>
+    <main className="download-page">
+      <h1 className="title">Download Files</h1>
+      <p className="subtitle">Tap a button to download the file.</p>
 
-      <div style={{ marginTop: 16, display: "grid", gap: 12, maxWidth: 520 }}>
-        {files.map((f) => (
-          <a
-            key={f.url}
-            href={f.url}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              padding: "12px 14px",
-              border: "1px solid #ccc",
-              borderRadius: 10,
-              textDecoration: "none",
-              color: "#111",
-            }}
+      <div className="btn-group">
+        {FILES.map((f) => (
+          <button
+            key={f.key}
+            onClick={() => startDownload(f.key)}
+            className="download-btn"
           >
-            {f.name}
-          </a>
+            {f.label}
+          </button>
         ))}
       </div>
 
-      <p style={{ marginTop: 16, color: "#555" }}>
-        Note: Some phones will open a preview first. If that happens, use the
-        download icon in the viewer.
-      </p>
+      <style jsx>{`
+        .download-page {
+          min-height: 100vh;
+          padding: 24px;
+          font-family:
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            Oxygen,
+            Ubuntu,
+            Cantarell,
+            "Open Sans",
+            "Helvetica Neue",
+            sans-serif;
+          background-color: #f9fafb;
+          color: #111827;
+        }
+
+        .title {
+          font-size: 22px;
+          margin-bottom: 6px;
+        }
+
+        .subtitle {
+          margin-bottom: 20px;
+          color: #374151;
+        }
+
+        .btn-group {
+          display: grid;
+          gap: 14px;
+          max-width: 520px;
+        }
+
+        .download-btn {
+          padding: 14px 16px;
+          font-size: 16px;
+          text-align: left;
+          border-radius: 12px;
+          border: 1px solid #d1d5db;
+          background-color: #ffffff;
+          color: #111827;
+          cursor: pointer;
+          transition:
+            background 0.2s ease,
+            transform 0.05s ease;
+        }
+
+        .download-btn:hover {
+          background-color: #f3f4f6;
+        }
+
+        .download-btn:active {
+          transform: scale(0.99);
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+          .download-page {
+            background-color: #0f172a;
+            color: #f9fafb;
+          }
+
+          .subtitle {
+            color: #cbd5f5;
+          }
+
+          .download-btn {
+            background-color: #1e293b;
+            color: #f9fafb;
+            border: 1px solid #334155;
+          }
+
+          .download-btn:hover {
+            background-color: #334155;
+          }
+        }
+      `}</style>
     </main>
   );
 }
