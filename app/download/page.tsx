@@ -10,14 +10,20 @@ const FILES: { key: FileKey; label: string }[] = [
 
 export default function DownloadPage() {
   const startDownload = (key: FileKey) => {
-    // Triggers server-side download via Next.js API
-    window.location.href = `/api/dl?key=${key}`;
+    // Create a temporary anchor instead of mutating window.location
+    const a = document.createElement("a");
+    a.href = `/api/dl?key=${key}`;
+    a.rel = "noreferrer";
+    a.target = "_self"; // ensures download happens in same tab
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
     <main className="download-page">
       <h1 className="title">Download Files</h1>
-      <p className="subtitle">Tap a button to download the file.</p>
+      <p className="subtitle">Tap a button to download.</p>
 
       <div className="btn-group">
         {FILES.map((f) => (
@@ -35,18 +41,7 @@ export default function DownloadPage() {
         .download-page {
           min-height: 100vh;
           padding: 24px;
-          font-family:
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            "Open Sans",
-            "Helvetica Neue",
-            sans-serif;
+          font-family: system-ui, sans-serif;
           background-color: #f9fafb;
           color: #111827;
         }
@@ -76,20 +71,8 @@ export default function DownloadPage() {
           background-color: #ffffff;
           color: #111827;
           cursor: pointer;
-          transition:
-            background 0.2s ease,
-            transform 0.05s ease;
         }
 
-        .download-btn:hover {
-          background-color: #f3f4f6;
-        }
-
-        .download-btn:active {
-          transform: scale(0.99);
-        }
-
-        /* Dark mode support */
         @media (prefers-color-scheme: dark) {
           .download-page {
             background-color: #0f172a;
@@ -104,10 +87,6 @@ export default function DownloadPage() {
             background-color: #1e293b;
             color: #f9fafb;
             border: 1px solid #334155;
-          }
-
-          .download-btn:hover {
-            background-color: #334155;
           }
         }
       `}</style>
